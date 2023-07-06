@@ -4,22 +4,21 @@
  * @return {number[][]}
  */
 var combinationSum2 = function(candidates, target) {
-    if (!candidates || candidates.length == 0) return [];
-    let res = [];
-    candidates.sort((a,b) => a-b);
-    var helper = function(curSum, cur, index){
-        if (curSum == target){
-            res.push([...cur]);
+    candidates.sort((a, b) => a - b)
+    let res = []
+
+    let iterate = (index,sum,temp) => {
+        if(sum > target) return;
+        if(sum == target){
+            res.push(temp)
             return;
         }
+
         for(let i = index; i < candidates.length; i++){
-            if (i != index && candidates[i] == candidates[i-1]) continue;
-            if (curSum > target) return;
-            cur.push(candidates[i]);
-            helper(curSum+candidates[i], cur, i+1);
-            cur.pop();
+            if(i != index && candidates[i] == candidates[i - 1]) continue;
+            iterate(i + 1,sum + candidates[i], [...temp, candidates[i]])
         }
     }
-    helper(0, [], 0);
+    iterate(0, 0, [])
     return res;
 };
