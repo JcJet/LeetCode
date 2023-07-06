@@ -4,21 +4,23 @@
  * @return {number[][]}
  */
 var combinationSum2 = function(candidates, target) {
-    candidates.sort((a, b) => a - b)
-    let res = []
-
-    let iterate = (index,sum,temp) => {
-        if(sum > target) return;
-        if(sum == target){
-            res.push(temp)
+    let res = [];
+    let c = []
+    candidates.sort((a,b) => b-a)
+    let dfs = function(t, j) {
+        if (t < 0) return;
+        if (t == 0) {
+            res.push([...c]);
             return;
         }
-
-        for(let i = index; i < candidates.length; i++){
-            if(i != index && candidates[i] == candidates[i - 1]) continue;
-            iterate(i + 1,sum + candidates[i], [...temp, candidates[i]])
+        for(let i = j; i < candidates.length; i++) {
+            if (candidates[i] > target) continue;
+            c.push(candidates[i]);
+            dfs(t-candidates[i], i+1);
+            c.pop();
+            while (candidates[i+1] == candidates[i]) i++;
         }
     }
-    iterate(0, 0, [])
+    dfs(target, 0);
     return res;
 };
