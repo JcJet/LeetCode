@@ -1,0 +1,17 @@
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        # Compute the length of nums
+        n = len(nums)
+
+        # Initialize the difference of sum by n
+        differenceOfSum = n
+
+        # Run a loop from 0 to (n - 1)
+        for i in range(n):
+            # Add to the difference of sum the number i
+            # and subtract the number at index i in nums
+            differenceOfSum += (i - nums[i])
+
+        # After adding all of the differences only
+        # the missing number will remain in the difference of sum
+        return differenceOfSum
