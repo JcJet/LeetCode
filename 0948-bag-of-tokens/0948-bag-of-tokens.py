@@ -1,5 +1,5 @@
-class Solution:
-    def bagOfTokensScore(self, tokens: List[int], power: int) -> int:
+class Solution(object):
+    def bagOfTokensScore(self, tokens, power):
         if not tokens:
             return 0
 
