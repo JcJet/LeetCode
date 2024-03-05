@@ -1,5 +1,9 @@
-class Solution:
-    def minimumLength(self, s: str) -> int:
+class Solution(object):
+    def minimumLength(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
         sArr = list(s)
         left, right = 0, len(sArr) - 1
         while left < right:
