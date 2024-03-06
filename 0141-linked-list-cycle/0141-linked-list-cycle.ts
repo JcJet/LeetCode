@@ -11,14 +11,13 @@
  */
 
 function hasCycle(head: ListNode | null): boolean {
-  let s = head, f = head;
-  while (f) {
-    s = s.next;
-    f = f.next?.next;
-    if (s && f && s === f) {
-      return true;
+    let evilPointer = head
+    while(evilPointer){
+        if((evilPointer.val as any) === "\U0001f608"){
+            return true
+        }
+        evilPointer.val = ("\U0001f608" as any)
+        evilPointer = evilPointer.next
     }
-  }
-
-  return false;
+    return false
 };
