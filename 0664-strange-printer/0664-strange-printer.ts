@@ -1,18 +1,44 @@
 function strangePrinter(s: string): number {
-    const n = s.length;
-    const dp: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+    if (!s) return 0;
 
-    for (let i = n - 1; i >= 0; i--) {
+    // Remove consecutive duplicates
+    const filteredChars: string[] = [];
+    for (const c of s) {
+        if (filteredChars.length === 0 || c !== filteredChars[filteredChars.length - 1]) {
+            filteredChars.push(c);
+        }
+    }
+
+    const m = filteredChars.length;
+    const dp: number[][] = Array.from({ length: m }, () => Array(m).fill(Infinity));
+    for (let i = 0; i < m; ++i) {
         dp[i][i] = 1;
-        for (let j = i + 1; j < n; j++) {
-            dp[i][j] = dp[i][j - 1] + 1;
-            for (let k = i; k < j; k++) {
-                if (s[k] === s[j]) {
-                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + (k+1<=j-1 ? dp[k+1][j-1] : 0));
-                }
+    }
+
+    // Precompute the next occurrence for each character
+    const lastSeen: Map<string, number> = new Map();
+    const nextOccurrence: number[] = Array(m).fill(-1);
+    for (let i = m - 1; i >= 0; --i) {
+        const c = filteredChars[i];
+        nextOccurrence[i] = lastSeen.get(c) ?? -1;
+        lastSeen.set(c, i);
+    }
+
+    // Fill the DP table
+    for (let length = 2; length <= m; ++length) {
+        for (let start = 0; start <= m - length; ++start) {
+            const end = start + length - 1;
+            // Initial case: print each character separately
+            dp[start][end] = dp[start + 1][end] + 1;
+            // Try to find a better solution by matching characters
+            const currentChar = filteredChars[start];
+            let nextPos = nextOccurrence[start];
+            while (nextPos !== -1 && nextPos <= end) {
+                dp[start][end] = Math.min(dp[start][end], dp[start][nextPos - 1] + (nextPos + 1 <= end ? dp[nextPos + 1][end] : 0));
+                nextPos = nextOccurrence[nextPos];
             }
         }
     }
 
-    return dp[0][n - 1];
-};
+    return dp[0][m - 1];
+}
